@@ -2,13 +2,14 @@ package servlet;
 
 import java.io.IOException;
 
+import dao.AccountDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import model.Acount;
+import model.Account;
+import model.AccountSetupper;
 
 /**
  * Servlet implementation class TopServlet
@@ -41,7 +42,8 @@ public class TopServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		setAcount(request);
+		AccountSetupper acsu=new AccountSetupper(request);
+		acsu.exe();
 		
 		response.sendRedirect("main");
 	
@@ -52,12 +54,16 @@ public class TopServlet extends HttpServlet {
 	protected void setAcount(HttpServletRequest request) {
 		String name = request.getParameter("name");
 		String pass = request.getParameter("pass");
-
-		Acount acount = new Acount(name);
 		
-		request.setAttribute("acount",acount);
-
+		AccountDAO adad = new AccountDAO(name,pass);
 	
+
+		Account acount = new Account(name);
+		request.setAttribute("acount",acount);
+	}
+	
+	protected void register() {
+		
 	}
 
 }
