@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import model.Acount;
+
 /**
  * Servlet implementation class TopServlet
  */
@@ -39,32 +41,23 @@ public class TopServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String acount = request.getParameter("acount");
+		setAcount(request);
+		
+		response.sendRedirect("main");
+	
+
+	
+	}
+
+	protected void setAcount(HttpServletRequest request) {
+		String name = request.getParameter("name");
 		String pass = request.getParameter("pass");
 
-		switch (request.getParameter("action")) {
-		case "登録":
-			registerCheck(acount, pass);
-			request.setAttribute("acount",acount);
-			response.sendRedirect("main");
-			break;
+		Acount acount = new Acount(name);
+		
+		request.setAttribute("acount",acount);
 
-		case "ログイン":
-			roginCheck(acount, pass);
-			request.setAttribute("acount",acount);
-			response.sendRedirect("main");
-			break;
-
-		default:
-			System.out.println("top.doPost default");
-			break;
-		}
+	
 	}
 
-	protected void registerCheck(String name, String pass) {
-	}
-
-	protected void roginCheck(String name, String pass) {
-
-	}
 }

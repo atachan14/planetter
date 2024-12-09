@@ -11,5 +11,8 @@ public class Acount {
 	Pos nextPos;
 	int direction;
 
+	public Acount(String name) {
+		this.name = name;
+	}
 
 }

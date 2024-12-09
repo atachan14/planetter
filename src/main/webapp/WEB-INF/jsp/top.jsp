@@ -9,9 +9,9 @@
 	アカウント登録/ログイン
 	<br>
 	<form action="top" method="post">
-		アカウント：<input type="text" name="name"><br>
-		パスワード：<input type="text" name="pass"> <br>
-<input type="submit" name="action" value="登録" style="margin-right: 5px;"><input type="submit" name="action" value="ログイン"><br>
+		UserName：<input type="text" name="name"><br> 
+		Password：<input type="text" name="pass"> <br> 
+		<input type="submit" value="登録/ログイン"><br>
 	</form>
 </body>
 </html>
