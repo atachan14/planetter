@@ -1,9 +1,11 @@
 package model;
 
-public class Account {
-	String name;
+import java.io.Serializable;
+
+public class Account implements Serializable{
+	private String name;
 	int stardust;
-	
+
 	String nowPlanet;
 	int x;
 	int y;
@@ -12,14 +14,18 @@ public class Account {
 	int nextPosx;
 	int nextPosy;
 
-	public Account(String name) {
-		this.name = name;
-		this.stardust = 100;
+	public Account() {
+	}
 
-		this.nowPlanet="beginerPlanet";
-		this.x=5;
-		this.y=5;
-		this.direction=2;
+	public Account(String name, int stardust, String nowPlanet, int x, int y, int direction) {
+		this.name = name;
+		this.stardust = stardust;
+
+		this.nowPlanet = nowPlanet;
+		this.x = x;
+		this.y = y;
+		this.direction = direction;
+
 	}
 
 	public String getName() {
@@ -45,8 +51,6 @@ public class Account {
 	public void setNowPlanet(String nowPlanet) {
 		this.nowPlanet = nowPlanet;
 	}
-
-	
 
 	public int getNowPosx() {
 		return x;
@@ -87,7 +91,5 @@ public class Account {
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
-	
-	
 
 }

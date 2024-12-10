@@ -10,7 +10,9 @@
 	<br>
 	<form action="top" method="post">
 		UserName：<input type="text" name="name"><br> 
-		Password：<input type="text" name="pass"> <br> 
+		Password：<input type="text" name="pass"> 
+<!--		<c:if test="${error!=null}">パスワードが間違っています。</c:if>-->
+		<br> 
 		<input type="submit" value="登録/ログイン"><br>
 	</form>
 </body>

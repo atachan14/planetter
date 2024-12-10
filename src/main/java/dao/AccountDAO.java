@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
+
+import model.Account;
 
 public class AccountDAO {
 	private final String DB_URL = "jdbc:mysql://localhost:3306/planetter";
@@ -59,7 +62,7 @@ public class AccountDAO {
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT PASS FROM NAME WHERE NAME = ?";
+			String sql = "SELECT PASS FROM ACCOUNT WHERE NAME = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, name);
 
@@ -89,9 +92,9 @@ public class AccountDAO {
 			pStmt.setString(2, pass);
 			pStmt.setInt(3, 10000);
 			pStmt.setString(4, "beginerPlanet");
-			pStmt.setInt(5, 5);
-			pStmt.setInt(6, 5);
-			pStmt.setInt(7, 2);
+			pStmt.setInt(5, new Random().nextInt(10));
+			pStmt.setInt(6, new Random().nextInt(10));
+			pStmt.setInt(7, new Random().nextInt(4));
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {
@@ -103,7 +106,33 @@ public class AccountDAO {
 		}
 
 		return true;
-
 	}
 
+	public Account getAccount() {
+		try {
+			Class.forName(JDBC_DRIVER);
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException(
+					"JDBCドライバを読み込めませんでした");
+		}
+
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT * FROM ACCOUNT WHERE NAME=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, name);
+
+			ResultSet rs = pStmt.executeQuery();
+			int stardust = rs.getInt("STARDUST");
+			String nowPlanet = rs.getString("NOWPLANET");
+			int x = rs.getInt("x");
+			int y = rs.getInt("y");
+			int direction = rs.getInt("direction");
+			Account ac = new Account(name,stardust,nowPlanet,x,y,direction);
+			return ac;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
