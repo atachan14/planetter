@@ -34,9 +34,10 @@ public class AccountDAO {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
 
-			String sql = "SELECT COUNT(*) FROM NAME WHERE NAME = ?";
+			String sql = "SELECT COUNT(*) FROM ACCOUNT WHERE NAME = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, name);
+			System.out.println(name);
 
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next() && rs.getInt(1) > 0) {
@@ -67,7 +68,12 @@ public class AccountDAO {
 			pStmt.setString(1, name);
 
 			ResultSet rs = pStmt.executeQuery();
-			return rs.getString("PASS");
+			 if (rs.next()) {  // ここでカーソルを次の位置に移動
+		            return rs.getString("PASS");
+		        } else {
+		            System.out.println("データが見つかりません");
+		            return null;
+		        }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -85,16 +91,18 @@ public class AccountDAO {
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO `account`(`name`, `pass`, `stardust`, `nowPlanet`, `x`, `y`, `direction`) "
-					+ "VALUES (?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO `account`(`name`, `pass`, `stardust`, `nowPlanet`, `x`, `y`, `direction`) VALUES (?,?,?,?,?,?,?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, name);
 			pStmt.setString(2, pass);
 			pStmt.setInt(3, 10000);
 			pStmt.setString(4, "beginerPlanet");
-			pStmt.setInt(5, new Random().nextInt(10));
-			pStmt.setInt(6, new Random().nextInt(10));
-			pStmt.setInt(7, new Random().nextInt(4));
+			Random random = new Random();
+			pStmt.setInt(5, random.nextInt(10));
+			pStmt.setInt(6, random.nextInt(10));
+			pStmt.setInt(7, random.nextInt(4));
+			
+			System.out.println(pStmt);
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {

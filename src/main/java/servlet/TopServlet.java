@@ -7,13 +7,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import model.AccountManager;
 
 /**
  * Servlet implementation class TopServlet
  */
-@WebServlet("/Top")
+@WebServlet("/top")
 public class TopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String PATH_top = "WEB-INF/jsp/top.jsp";
@@ -47,7 +46,7 @@ public class TopServlet extends HttpServlet {
 			response.sendRedirect("main");
 		} else {
 			request.setAttribute("error", "パスワードが間違っています");
-			request.getRequestDispatcher(PATH_top);
+			request.getRequestDispatcher(PATH_top).forward(request, response);
 		}
 
 	}

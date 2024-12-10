@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,7 @@
 	<form action="top" method="post">
 		UserName：<input type="text" name="name"><br> 
 		Password：<input type="text" name="pass"> 
-<!--		<c:if test="${error!=null}">パスワードが間違っています。</c:if>-->
+<c:if test="${error!=null}">パスワードが間違っています。</c:if>
 		<br> 
 		<input type="submit" value="登録/ログイン"><br>
 	</form>

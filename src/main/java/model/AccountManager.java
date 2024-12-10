@@ -1,18 +1,15 @@
 package model;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 import dao.AccountDAO;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AccountManager {
 	private String name;
 	private String pass;
-	private HttpSession session;
 	private AccountDAO acdao;
 
 	public AccountManager(HttpServletRequest request) {
-		this.session = request.getSession();
+//		this.session = request.getSession();
 		this.name = request.getParameter("name");
 		this.pass = request.getParameter("pass");
 		this.acdao = new AccountDAO(name, pass);

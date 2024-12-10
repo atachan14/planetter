@@ -11,9 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class MainServlet
  */
-@WebServlet("/Main")
+@WebServlet("/main")
 public class MainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final String PATH_main = "WEB-INF/jsp/main.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -28,8 +29,8 @@ public class MainServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DisplayManager displayManager = new DisplayManager();
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher(PATH_main).forward(request, response);
+		
 	}
 
 	/**
