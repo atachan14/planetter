@@ -7,16 +7,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
-import model.Account;
+import model.data.AccountData;
 
 public class AccountDAO {
 	private final String DB_URL = "jdbc:mysql://localhost:3306/planetter";
 	private final String DB_USER = "root";
 	private final String DB_PASS = "root";
-	private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
 	private String name;
 	private String pass;
+
+	public AccountDAO(String name) {
+		this.name = name;
+	}
 
 	public AccountDAO(String name, String pass) {
 		this.name = name;
@@ -24,12 +27,12 @@ public class AccountDAO {
 	}
 
 	public boolean AccountCheck() {
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
+		//		try {
+		//			Class.forName(JDBC_DRIVER);
+		//		} catch (ClassNotFoundException e) {
+		//			throw new IllegalStateException(
+		//					"JDBCドライバを読み込めませんでした");
+		//		}
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
@@ -54,12 +57,12 @@ public class AccountDAO {
 	}
 
 	public String getPass(String name) {
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
+		//		try {
+		//			Class.forName(JDBC_DRIVER);
+		//		} catch (ClassNotFoundException e) {
+		//			throw new IllegalStateException(
+		//					"JDBCドライバを読み込めませんでした");
+		//		}
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
@@ -68,13 +71,14 @@ public class AccountDAO {
 			pStmt.setString(1, name);
 
 			ResultSet rs = pStmt.executeQuery();
-			 if (rs.next()) {  // ここでカーソルを次の位置に移動
-		            return rs.getString("PASS");
-		        } else {
-		            System.out.println("データが見つかりません");
-		            return null;
-		        }
+			if (rs.next()) {
+				return rs.getString("PASS");
+			} else {
+				System.out.println("acdao.getPass:データが見つかりません");
+				return null;
+			}
 		} catch (SQLException e) {
+			System.out.println("acdao.getPass:SQLException");
 			e.printStackTrace();
 			return null;
 		}
@@ -82,12 +86,8 @@ public class AccountDAO {
 	}
 
 	public boolean register() {
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
+
+		Random random = new Random();
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
@@ -96,19 +96,18 @@ public class AccountDAO {
 			pStmt.setString(1, name);
 			pStmt.setString(2, pass);
 			pStmt.setInt(3, 10000);
-			pStmt.setString(4, "beginerPlanet");
-			Random random = new Random();
+			pStmt.setString(4, "beginersPlanet");
 			pStmt.setInt(5, random.nextInt(10));
 			pStmt.setInt(6, random.nextInt(10));
 			pStmt.setInt(7, random.nextInt(4));
-			
-			System.out.println(pStmt);
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {
+				System.out.println("acdao.register失敗1");
 				return false;
 			}
 		} catch (SQLException e1) {
+			System.out.println("acdao.register失敗2");
 			e1.printStackTrace();
 			return false;
 		}
@@ -116,30 +115,47 @@ public class AccountDAO {
 		return true;
 	}
 
-	public Account getAccount() {
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
-
+	public String getPlanet() {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT * FROM ACCOUNT WHERE NAME=?";
+			String sql = "SELECT `nowPlanet` FROM `account` WHERE name=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, name);
 
 			ResultSet rs = pStmt.executeQuery();
-			int stardust = rs.getInt("STARDUST");
-			String nowPlanet = rs.getString("NOWPLANET");
-			int x = rs.getInt("x");
-			int y = rs.getInt("y");
-			int direction = rs.getInt("direction");
-			Account ac = new Account(name,stardust,nowPlanet,x,y,direction);
-			return ac;
-		} catch (SQLException e) {
-			e.printStackTrace();
+			if (rs.next()) {
+				return rs.getString("nowPlanet");
+			} else {
+				System.out.println("acdao.getPlanet データが見つかりません");
+				return null;
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("acdao.getPlanet失敗");
+			e1.printStackTrace();
+			return null;
+		}
+	}
+
+	public AccountData getAll() {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT * FROM `account` WHERE name=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, name);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				return new AccountData(rs.getString("name"),rs.getString("nowplanet"),rs.getInt("stardust"),rs.getInt("stomach"),rs.getInt("x"),rs.getInt("y"),rs.getInt("direction"));
+				
+			} else {
+				System.out.println("acdao.getAll データが見つかりません");
+				return null;
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("acdao.getAll失敗");
+			e1.printStackTrace();
 			return null;
 		}
 	}

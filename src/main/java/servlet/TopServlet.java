@@ -7,7 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.AccountManager;
+
+import model.LoginManager;
 
 /**
  * Servlet implementation class TopServlet
@@ -40,9 +41,12 @@ public class TopServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		AccountManager acmana = new AccountManager(request);
-		if (acmana.loginCheck()) {
-			request.getSession().setAttribute("acmana", acmana);
+		String name = request.getParameter("name");
+		String pass = request.getParameter("pass");
+		LoginManager loginManager = new LoginManager(name,pass);
+		
+		if (loginManager.loginCheck()) {
+			request.getSession().setAttribute("aci", loginManager.getAccountData());
 			response.sendRedirect("main");
 		} else {
 			request.setAttribute("error", "パスワードが間違っています");
