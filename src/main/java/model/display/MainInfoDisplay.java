@@ -2,17 +2,17 @@ package model.display;
 
 import java.util.Map;
 
-import jakarta.servlet.http.HttpSession;
-
 import dao.AccountDAO;
+import jakarta.servlet.http.HttpSession;
 import model.PosInfoManager;
 import model.data.AccountData;
 
 public class MainInfoDisplay {
 	AccountDAO acdao;
 	private String acName;
+	private String acKeepDate;
 	private String plName;
-	private String plInfo;
+	private String plKeepDate;
 
 	private int stardust;
 	private int stomach;
@@ -30,19 +30,22 @@ public class MainInfoDisplay {
 	private String v6Info;
 
 	public MainInfoDisplay(HttpSession session) {
+		AccountData acd = (AccountData) session.getAttribute("acd");
+		System.out.println(acd.getName());
 
-		setupProperties((AccountData) session.getAttribute("aci"));
+		setupProperties((AccountData) session.getAttribute("acd"));
 		setupAroundInfo();
 
 	}
 
-	void setupProperties(AccountData aci) {
-		this.plName = aci.getPlanet();
-		this.stardust = aci.getStardust();
-		this.stomach = aci.getStomach();
-		this.x = aci.getX();
-		this.y = aci.getY();
-		this.direction = aci.getDirection();
+	void setupProperties(AccountData acd) {
+		this.acName = acd.getName();
+		this.plName = acd.getPlanet();
+		this.stardust = acd.getStardust();
+		this.stomach = acd.getStomach();
+		this.x = acd.getX();
+		this.y = acd.getY();
+		this.direction = acd.getDirection();
 	}
 
 	void setupAroundInfo() {
@@ -114,7 +117,5 @@ public class MainInfoDisplay {
 	public String getV6Info() {
 		return v6Info;
 	}
-
-
 
 }

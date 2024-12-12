@@ -23,7 +23,6 @@ public class PosInfoManager {
 		this.plName = plName;
 
 		Pos pos = PlanetDAO.getSize(plName);
-		System.out.println("pim"+pos.getx());
 		this.pxsize = pos.getx();
 		this.pysize = pos.gety();
 
@@ -37,7 +36,7 @@ public class PosInfoManager {
 				int tempx = (x - (i - 1) % 3 + 1);
 				int tempy = (y - (i - 1) / 3 + 1);
 				aroundPos[i] = new Pos(tempx, tempy);
-				System.out.println(aroundPos[i].getxy());// debug
+//				System.out.println(aroundPos[i].getxy());// debug
 			}
 			break;
 		case 1:
@@ -45,7 +44,7 @@ public class PosInfoManager {
 				int tempx = (x - (i - 1) / 3 + 1);
 				int tempy = (y + (i - 1) % 3 - 1);
 				aroundPos[i] = new Pos(tempx, tempy);
-				System.out.println(aroundPos[i].getxy());// debug
+//				System.out.println(aroundPos[i].getxy());// debug
 			}
 			break;
 		case 2:
@@ -53,7 +52,7 @@ public class PosInfoManager {
 				int tempx = (x + (i - 1) % 3 - 1);
 				int tempy = (y + (i - 1) / 3 - 1);
 				aroundPos[i] = new Pos(tempx, tempy);
-				System.out.println(aroundPos[i].getxy());// debug
+//				System.out.println(aroundPos[i].getxy());// debug
 			}
 			break;
 		case 3:
@@ -61,7 +60,7 @@ public class PosInfoManager {
 				int tempx = (x + (i - 1) / 3 - 1);
 				int tempy = (y - (i - 1) % 3 + 1);
 				aroundPos[i] = new Pos(tempx, tempy);
-				System.out.println(aroundPos[i].getxy());// debug
+//				System.out.println(aroundPos[i].getxy());// debug
 			}
 			break;
 		default:
@@ -82,11 +81,11 @@ public class PosInfoManager {
 		pos.sety(y);
 	}
 
-	int edgeOverInt(int num, int psize) {
-		if (num > pxsize - 1)
-			num = num - pxsize;
+	static int edgeOverInt(int num, int psize) {
+		if (num > psize - 1)
+			num = num - psize;
 		if (num < 0)
-			num = pxsize + num;
+			num = psize + num;
 
 		return num;
 	}
@@ -94,7 +93,7 @@ public class PosInfoManager {
 	public String getTileInfo(Pos pos) {
 		switch (TileDAO.findType(plName, pos)) {
 		case "no objects":
-			return "no objects";
+			return "--";
 
 		case "tweet":
 			return "tweetの一番上";

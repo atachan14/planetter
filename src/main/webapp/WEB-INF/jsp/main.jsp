@@ -22,7 +22,7 @@
 					<td style="text-align: center;">${mainInfo.v6Info}</td>
 				</tr>
 				<tr style="height: 10%">
-					<td colspan="3"><jsp:include page="mainFootCommand.jsp" /></td>
+					<td colspan="3"><jsp:include page="mainFootButton.jsp" /></td>
 				</tr>
 			</table>
 		</div>

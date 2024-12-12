@@ -39,7 +39,7 @@ public class TileDAO {
 				type = rs.getString("type");
 				return type;
 			} else {
-				System.out.println("ObjectDAO.findType null" + x + "," + y);
+//				System.out.println("ObjectDAO.findType null" + x + "," + y);
 				return type;
 			}
 
@@ -50,7 +50,7 @@ public class TileDAO {
 		}
 	}
 
-	public boolean insertType(String planet, int x, int y, String type) {
+	public static boolean insertType(String planet, int x, int y, String type) {
 		try {
 			Class.forName(JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {
@@ -60,7 +60,7 @@ public class TileDAO {
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO `object`(`planet`, `x`, `y`,`type`) VALUES (?,?,?,?)";
+			String sql = "INSERT INTO `Tile`(`planet`, `x`, `y`,`type`) VALUES (?,?,?,?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, planet);
 			pStmt.setInt(2, x);

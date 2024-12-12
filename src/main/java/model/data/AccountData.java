@@ -20,6 +20,8 @@ public class AccountData implements Serializable{
 		this.y = y;
 		this.direction = direction;
 	}
+	
+
 
 	public String getName() {
 		return name;

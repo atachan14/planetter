@@ -7,20 +7,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.LoginManager;
+import model.SideButtonCushion;
+import model.data.AccountData;
 
 /**
- * Servlet implementation class TopServlet
+ * Servlet implementation class MainSideServlet
  */
-@WebServlet("/top")
-public class TopServlet extends HttpServlet {
+@WebServlet("/mainSide")
+public class MainSideServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final String PATH_top = "WEB-INF/jsp/top.jsp";
+	private final String PATH_main = "WEB-INF/jsp/main.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public TopServlet() {
+	public MainSideServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -31,7 +32,8 @@ public class TopServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getRequestDispatcher(PATH_top).forward(request, response);
+
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -40,18 +42,12 @@ public class TopServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String name = request.getParameter("name");
-		String pass = request.getParameter("pass");
-		LoginManager loginManager = new LoginManager(name, pass);
+		
+		AccountData acd = (AccountData) request.getSession().getAttribute("acd");
+		String sideButton = request.getParameter("sideButton");
+		SideButtonCushion.Exe(acd, sideButton);
 
-		if (loginManager.loginCheck()) {
-			request.getSession().setAttribute("acName", name);
-			response.sendRedirect("main");
-		} else {
-			request.setAttribute("error", "パスワードが間違っています");
-			request.getRequestDispatcher(PATH_top).forward(request, response);
-		}
-
+		request.getRequestDispatcher(PATH_main).forward(request, response);
 	}
 
 }

@@ -10,9 +10,9 @@ import java.util.Random;
 import model.data.AccountData;
 
 public class AccountDAO {
-	private final String DB_URL = "jdbc:mysql://localhost:3306/planetter";
-	private final String DB_USER = "root";
-	private final String DB_PASS = "root";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/planetter";
+	private static final String DB_USER = "root";
+	private static final String DB_PASS = "root";
 
 	private String name;
 	private String pass;
@@ -146,8 +146,9 @@ public class AccountDAO {
 
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
-				return new AccountData(rs.getString("name"),rs.getString("nowplanet"),rs.getInt("stardust"),rs.getInt("stomach"),rs.getInt("x"),rs.getInt("y"),rs.getInt("direction"));
-				
+				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
+						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"));
+
 			} else {
 				System.out.println("acdao.getAll データが見つかりません");
 				return null;
@@ -158,5 +159,26 @@ public class AccountDAO {
 			e1.printStackTrace();
 			return null;
 		}
+	}
+
+	public static boolean updateInt(String calumn, int value, String name) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "UPDATE account SET " + calumn + " = ? WHERE name = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, value);
+			pStmt.setString(2, name);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("acdao.updateInt失敗1");
+				return false;
+			}
+		} catch (SQLException e1) {
+			System.out.println("acdao.updateInt失敗2");
+			e1.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
