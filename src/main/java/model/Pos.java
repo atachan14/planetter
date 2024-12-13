@@ -1,8 +1,11 @@
 package model;
 
 public class Pos {
-	int y;
+	
 	int x;
+	int y;
+	
+	
 
 	public Pos() {
 		
@@ -38,6 +41,9 @@ public class Pos {
 		this.y = y;
 
 	}
+
+
+	
 
 	// public boolean getHasAround() {
 	// return hasAround;

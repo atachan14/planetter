@@ -96,7 +96,7 @@ public class AccountDAO {
 			pStmt.setString(1, name);
 			pStmt.setString(2, pass);
 			pStmt.setInt(3, 10000);
-			pStmt.setString(4, "beginersPlanet");
+			pStmt.setString(4, "BeginersPlanet");
 			pStmt.setInt(5, random.nextInt(10));
 			pStmt.setInt(6, random.nextInt(10));
 			pStmt.setInt(7, random.nextInt(4));

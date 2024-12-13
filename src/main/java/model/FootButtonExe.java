@@ -63,22 +63,22 @@ public class FootButtonExe {
 		switch (direction) {
 		case 0:
 			y--;
-			y = PosInfoManager.edgeOverInt(y, plysize);
+			y = AroundInfoManager.edgeOverInt(y, plysize);
 			AccountDAO.updateInt("y", y, acName);
 			break;
 		case 1:
 			x--;
-			x = PosInfoManager.edgeOverInt(x, plxsize);
+			x = AroundInfoManager.edgeOverInt(x, plxsize);
 			AccountDAO.updateInt("x", x, acName);
 			break;
 		case 2:
 			y++;
-			y = PosInfoManager.edgeOverInt(y, plysize);
+			y = AroundInfoManager.edgeOverInt(y, plysize);
 			AccountDAO.updateInt("y", y, acName);
 			break;
 		case 3:
 			x++;
-			x = PosInfoManager.edgeOverInt(x, plxsize);
+			x = AroundInfoManager.edgeOverInt(x, plxsize);
 			AccountDAO.updateInt("x", x, acName);
 			break;
 		default:

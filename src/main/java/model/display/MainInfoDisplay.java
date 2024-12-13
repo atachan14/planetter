@@ -2,10 +2,12 @@ package model.display;
 
 import java.util.Map;
 
-import dao.AccountDAO;
 import jakarta.servlet.http.HttpSession;
-import model.PosInfoManager;
+
+import dao.AccountDAO;
+import model.AroundInfoManager;
 import model.data.AccountData;
+import model.data.TileData;
 
 public class MainInfoDisplay {
 	AccountDAO acdao;
@@ -26,8 +28,10 @@ public class MainInfoDisplay {
 	private String v9Info;
 
 	private String v4Info;
-	private String v5Info;
+	private TileData v5Tile;
 	private String v6Info;
+
+	private String v5JSP;
 
 	public MainInfoDisplay(HttpSession session) {
 		AccountData acd = (AccountData) session.getAttribute("acd");
@@ -35,7 +39,7 @@ public class MainInfoDisplay {
 
 		setupProperties((AccountData) session.getAttribute("acd"));
 		setupAroundInfo();
-
+		setupV5JSP();
 	}
 
 	void setupProperties(AccountData acd) {
@@ -49,17 +53,20 @@ public class MainInfoDisplay {
 	}
 
 	void setupAroundInfo() {
+		AroundInfoManager aim = new AroundInfoManager(x, y, direction, plName);
+		Map<Integer, TileData> aroundTile = aim.getAroundTileMap();
 
-		PosInfoManager pm = new PosInfoManager(x, y, direction, plName);
-		Map<Integer, String> aroundInfo = pm.getAroundInfoMap();
+		v7Info = aroundTile.get(7).getInfo();
+		v8Info = aroundTile.get(8).getInfo();
+		v9Info = aroundTile.get(9).getInfo();
 
-		v7Info = aroundInfo.get(7);
-		v8Info = aroundInfo.get(8);
-		v9Info = aroundInfo.get(9);
+		v4Info = aroundTile.get(4).getInfo();
+		v5Tile = aroundTile.get(5);
+		v6Info = aroundTile.get(6).getInfo();
+	}
 
-		v4Info = aroundInfo.get(4);
-		v5Info = aroundInfo.get(5);
-		v6Info = aroundInfo.get(6);
+	void setupV5JSP() {
+	
 	}
 
 	public String getAcName() {
@@ -110,12 +117,20 @@ public class MainInfoDisplay {
 		return v4Info;
 	}
 
-	public String getV5Info() {
-		return v5Info;
+	public TileData getV5Tile() {
+		return v5Tile;
 	}
 
 	public String getV6Info() {
 		return v6Info;
+	}
+
+	public String getV5JSP() {
+		return v5JSP;
+	}
+
+	public void setV5JSP(String v5jsp) {
+		v5JSP = v5jsp;
 	}
 
 }

@@ -8,20 +8,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import dao.TileDAO;
+import dao.TweetDAO;
 import model.data.AccountData;
 
 /**
- * Servlet implementation class MainSideServlet
+ * Servlet implementation class TweetServlet
  */
-@WebServlet("/mainSide")
-public class MainSideServlet extends HttpServlet {
+@WebServlet("/tweet")
+public class TweetServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final String PATH_main = "WEB-INF/jsp/main.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public MainSideServlet() {
+	public TweetServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -32,7 +33,6 @@ public class MainSideServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -42,11 +42,25 @@ public class MainSideServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String value = request.getParameter("tweet");
+		System.out.println("value"+value);
+		if (checkValueSize(value)) {
+			//あとで実装 フォワードで戻してエラーフラグを受け取らせる予定。
+		}
+		int tweetId = TweetDAO.insertTweet(value, request.getParameter("acName"));
+		System.out.println("tweetServlet.tweetId:" + tweetId);
 		
-		AccountData acd = (AccountData) request.getSession().getAttribute("acd");
-		String sideButton = request.getParameter("sideButton");
+		TileDAO.insertTile("tweet",tweetId,(AccountData)request.getSession().getAttribute("acd"));
+		
 
-		request.getRequestDispatcher(PATH_main).forward(request, response);
+		response.sendRedirect("main");
+	}
+
+	boolean checkValueSize(String value) {
+		if (value.length() > 64) {
+			return false;
+		}
+		return true;
 	}
 
 }

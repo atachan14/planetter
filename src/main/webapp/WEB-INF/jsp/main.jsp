@@ -18,7 +18,7 @@
 				</tr>
 				<tr style="height: 85%">
 					<td style="text-align: center;">${mainInfo.v4Info}</td>
-					<td style="overflow: auto; text-align: center;"><jsp:include page="mainNowInfo.jsp" /></td>
+					<td style="overflow: auto; text-align: center;"><jsp:include page="${mainCenter.jsp}" /></td>
 					<td style="text-align: center;">${mainInfo.v6Info}</td>
 				</tr>
 				<tr style="height: 10%">

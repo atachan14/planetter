@@ -1,6 +1,6 @@
 package test;
 
-import model.PosInfoManager;
+import model.AroundInfoManager;
 
 /*
  * 
@@ -16,7 +16,7 @@ public class PosManagerTest {
 		int direction = 1;
 		String plName = "BeginersPlanet";
 
-		PosInfoManager pm = new PosInfoManager(x, y, direction, plName);
+		AroundInfoManager pm = new AroundInfoManager(x, y, direction, plName);
 
 	}
 
