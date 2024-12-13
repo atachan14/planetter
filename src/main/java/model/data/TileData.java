@@ -3,7 +3,6 @@ package model.data;
 public class TileData {
 	int id;
 	String type;
-	int objectId;
 	String plName;
 	int x;
 	int y;
@@ -16,10 +15,9 @@ public class TileData {
 		this.y = y;
 	}
 	
-	public TileData(int id, String type, int objectId, String plName, int x, int y) {
+	public TileData(int id, String type, String plName, int x, int y) {
 		this.id = id;
 		this.type = type;
-		this.objectId = objectId;
 		this.plName = plName;
 		this.x = x;
 		this.y = y;
@@ -32,10 +30,6 @@ public class TileData {
 
 	public String getType() {
 		return type;
-	}
-
-	public int getObjectId() {
-		return objectId;
 	}
 
 	public String getPlName() {
@@ -60,10 +54,6 @@ public class TileData {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public void setObjectId(int objectId) {
-		this.objectId = objectId;
 	}
 
 	public void setInfo(String info) {

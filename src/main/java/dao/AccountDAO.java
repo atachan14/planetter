@@ -147,7 +147,7 @@ public class AccountDAO {
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
 				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
-						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"));
+						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),rs.getTimestamp("date"));
 
 			} else {
 				System.out.println("acdao.getAll データが見つかりません");

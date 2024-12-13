@@ -7,23 +7,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import model.data.TweetData;
+import model.data.PageData;
 
-public class TweetDAO {
+public class PageDAO {
 	private final static String DB_URL = "jdbc:mysql://localhost:3306/planetter";
 	private final static String DB_USER = "root";
 	private final static String DB_PASS = "root";
 
-	public static TweetData tileIdToTweetData(int tileId) {
+	public static PageData findPageDate(int id) {
+
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT * FROM tweet WHERE tileid = ?";
+			String sql = "SELECT * FROM page WHERE id = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, tileId);
+			pStmt.setInt(1, id);
 
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
-				return new TweetData(rs.getString("value"), rs.getString("criater"), rs.getString("date"));
+				return new PageData(rs.getString("name"), rs.getString("criater"), rs.getString("date"));
 			} else {
 				System.out.println("TweetDAO.findTweetDate else");
 				return null;
@@ -35,18 +36,17 @@ public class TweetDAO {
 			return null;
 		}
 	}
-	
-	
 
-	public static int insertTweet(String value, String criater, int tileId) {
+	public static int insertPage(String pageName, String criater,String tileId) {
 		int generatedId = -1;
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO `tweet`(`value`,`criater`,`tileId`) VALUES (?,?,?)";
+			String sql = "INSERT INTO `page`(`value`,`criater`,`tileId`) VALUES (?,?,?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pStmt.setString(1, value);
+			pStmt.setString(1, pageName);
 			pStmt.setString(2, criater);
-			pStmt.setInt(3, tileId);
+			pStmt.setString(3, tileId);
+			
 
 			int result = pStmt.executeUpdate();
 			if (result > 0) {
@@ -54,35 +54,15 @@ public class TweetDAO {
 					if (generatedKeys.next()) {
 						generatedId = generatedKeys.getInt(1);
 					} else {
-						System.out.println("insertTweet.generatedKeys.next()else");
+						System.out.println("insertPage.generatedKeys.next()else");
 					}
 				}
 			}
 		} catch (SQLException e1) {
-			System.out.println("insertTweet失敗2");
+			System.out.println("insertPage失敗2");
 			e1.printStackTrace();
 		}
-
 		return generatedId;
-
-	}
-
-	public static void updatePageId(int pageId,String tileId) {
-		try (Connection conn = DriverManager.getConnection(
-				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "UPDATE `tweet` SET `pageId`=?, WHERE tileid=?";
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, pageId);
-			pStmt.setString(2, tileId);
-
-			int result = pStmt.executeUpdate();
-			if (result != 1) {
-				System.out.println("tweetDAO updatePageId:しっぱい１");
-			}
-		} catch (SQLException e) {
-			System.out.println("tweetDAO updatePageId:しっぱい2");
-			e.printStackTrace();
-		}
 	}
 
 }

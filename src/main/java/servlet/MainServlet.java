@@ -40,16 +40,15 @@ public class MainServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String acName = (String) session.getAttribute("acName");
 		AccountDAO acdao = new AccountDAO(acName);
-		
+
 		AccountData acd = acdao.getAll();
 		session.setAttribute("acd", acd);
 
 		MainInfoDisplay mainInfo = new MainInfoDisplay(session);
 		session.setAttribute("mainInfo", mainInfo);
-		
+
 		MainCenterDisplay mainCenter = new MainCenterDisplay(session);
 		session.setAttribute("mainCenter", mainCenter);
-		
 
 		request.getRequestDispatcher(PATH_main).forward(request, response);
 
@@ -61,14 +60,14 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		switch(request.getParameter("formType")) {
+		switch (request.getParameter("formType")) {
 		case "foot":
 			FootButtonExe fbe = new FootButtonExe(request);
 			fbe.exe();
 			doGet(request, response);
-		case "side":
-			MainCenterDisplay mainCenter=new MainCenterDisplay();
-			mainCenter.selectSideButton(request.getParameter("sideButton"));
+		case "sdButton":
+			MainCenterDisplay mainCenter = new MainCenterDisplay();
+			mainCenter.selectSideButton(request.getParameter("button"));
 			request.setAttribute("mainCenter", mainCenter);
 			request.getRequestDispatcher(PATH_main).forward(request, response);
 		}

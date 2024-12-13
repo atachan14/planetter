@@ -13,7 +13,6 @@ public class AroundInfoManager {
 	int x;
 	int y;
 	int direction;
-	TileData[] aroundTile = new TileData[10];
 	Map<Integer, TileData> aroundTileMap = new HashMap<>();
 
 	String plName;
@@ -36,7 +35,7 @@ public class AroundInfoManager {
 	void setupAroundTile() {
 		switch (direction) {
 		case 0:
-			for (int i = 4; i < aroundTile.length; i++) {
+			for (int i = 4; i < 10; i++) {
 				int tempx = (x - (i - 1) % 3 + 1);
 				int tempy = (y - (i - 1) / 3 + 1);
 				aroundTileMap.put(i, new TileData(plName, tempx, tempy));
@@ -44,7 +43,7 @@ public class AroundInfoManager {
 			}
 			break;
 		case 1:
-			for (int i = 4; i < aroundTile.length; i++) {
+			for (int i = 4; i < 10; i++) {
 				int tempx = (x - (i - 1) / 3 + 1);
 				int tempy = (y + (i - 1) % 3 - 1);
 				aroundTileMap.put(i, new TileData(plName, tempx, tempy));
@@ -52,7 +51,7 @@ public class AroundInfoManager {
 			}
 			break;
 		case 2:
-			for (int i = 4; i < aroundTile.length; i++) {
+			for (int i = 4; i < 10; i++) {
 				int tempx = (x + (i - 1) % 3 - 1);
 				int tempy = (y + (i - 1) / 3 - 1);
 				aroundTileMap.put(i, new TileData(plName, tempx, tempy));
@@ -60,7 +59,7 @@ public class AroundInfoManager {
 			}
 			break;
 		case 3:
-			for (int i = 4; i < aroundTile.length; i++) {
+			for (int i = 4; i < 10; i++) {
 				int tempx = (x + (i - 1) / 3 - 1);
 				int tempy = (y - (i - 1) % 3 + 1);
 				aroundTileMap.put(i, new TileData(plName, tempx, tempy));
@@ -74,7 +73,7 @@ public class AroundInfoManager {
 		//		System.out.println("↓updated↓");
 		for (TileData tile : aroundTileMap.values()) {
 			edgeOverUpdate(tile);
-			TileDAO.updateTileData(tile);
+			TileDAO.posToTileData(tile);
 			setupInfo(tile);
 
 			//			System.out.println(aroundPos[i].getxy());
@@ -104,7 +103,7 @@ public class AroundInfoManager {
 			break;
 
 		case "tweet":
-			TweetData td =TweetDAO.findTweetDate(tile.getObjectId());
+			TweetData td = TweetDAO.tileIdToTweetData(tile.getId());
 			String value = td.getValue();
 			String info = value.length() > 6 ? value.substring(0, 5) + "..." : value;
 			tile.setInfo(info);

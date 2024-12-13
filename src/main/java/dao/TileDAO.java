@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import model.data.AccountData;
 import model.data.TileData;
@@ -15,21 +16,14 @@ public class TileDAO {
 	private final static String DB_PASS = "root";
 	private final static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-	public static void updateTileData(TileData pos) {
-		String planet = pos.getPlName();
-		int x = pos.getX();
-		int y = pos.getY();
-
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
+	public static void posToTileData(TileData tile) {
+		String planet = tile.getPlName();
+		int x = tile.getX();
+		int y = tile.getY();
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT id,type,objectid FROM tile WHERE planet = ? AND x = ? AND y = ?";
+			String sql = "SELECT id,type FROM tile WHERE planet = ? AND x = ? AND y = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, planet);
 			pStmt.setInt(2, x);
@@ -37,11 +31,10 @@ public class TileDAO {
 
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
-				pos.setId(rs.getInt("id"));
-				pos.setType(rs.getString("type"));
-				pos.setObjectId(rs.getInt("objectId"));
+				tile.setId(rs.getInt("id"));
+				tile.setType(rs.getString("type"));
 			} else {
-				pos.setType("no objects");
+				tile.setType("no objects");
 			}
 
 		} catch (SQLException e) {
@@ -50,23 +43,41 @@ public class TileDAO {
 		}
 	}
 
-	public static void insertTile(String type, int id, AccountData acd) {
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(
-					"JDBCドライバを読み込めませんでした");
-		}
-
+	public static int insertTile(String type, AccountData acd) {
+		int generatedId = -1;
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO `tile`(`type`, `objectID`, `planet`, `x`, `y`) VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO `tile`(`type`, `planet`, `x`, `y`) VALUES (?,?,?,?)";
+			PreparedStatement pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pStmt.setString(1, type);
+			pStmt.setString(2, acd.getPlanet());
+			pStmt.setInt(3, acd.getX());
+			pStmt.setInt(4, acd.getY());
+
+			int result = pStmt.executeUpdate();
+			if (result > 0) {
+				try (ResultSet generatedKeys = pStmt.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						generatedId = generatedKeys.getInt(1);
+					} else {
+						System.out.println("insertTile.generatedKeys.next()else");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("insertTile:しっぱい2");
+			e.printStackTrace();
+		}
+		return generatedId;
+	}
+
+	public static void updateType(String type, String id) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "UPDATE `tile` SET `type`=?, WHERE id=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, type);
-			pStmt.setInt(2, id);
-			pStmt.setString(3, acd.getPlanet());
-			pStmt.setInt(4, acd.getX());
-			pStmt.setInt(5, acd.getY());
+			pStmt.setString(2, id);
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {

@@ -8,21 +8,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import dao.PageDAO;
 import dao.TileDAO;
 import dao.TweetDAO;
-import model.data.AccountData;
 
 /**
- * Servlet implementation class TweetServlet
+ * Servlet implementation class PageServlet
  */
-@WebServlet("/tweet")
-public class TweetServlet extends HttpServlet {
+@WebServlet("/PageServlet")
+public class PageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public TweetServlet() {
+	public PageServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -42,21 +42,23 @@ public class TweetServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String value = request.getParameter("tweet");
-		if (!checkValueSize(value)) {
-			//あとで実装 フォワードで戻してエラーフラグを受け取らせる かも。
+		String pageName = request.getParameter("pageName");
+		if (!checkValueSize(pageName)) {
+			//あとで実装 フォワードで戻してエラーフラグを受け取らせる予定。
 		}
-		int tileId = TileDAO.insertTile("tweet",(AccountData)request.getSession().getAttribute("acd"));
-		TweetDAO.insertTweet(value, request.getParameter("acName"),tileId);
+		int pageId = PageDAO.insertPage(pageName, request.getParameter("acName"), request.getParameter("tileId"));
+		System.out.println("pageServlet.pageId:" + pageId);
+
+		TweetDAO.updatePageId(pageId, request.getParameter("tileId"));
+		TileDAO.updateType("page", request.getParameter("tileId"));
 
 		response.sendRedirect("main");
 	}
 
 	boolean checkValueSize(String value) {
-		if (value.length() > 64) {
+		if (value.length() > 16) {
 			return false;
 		}
 		return true;
 	}
-
 }

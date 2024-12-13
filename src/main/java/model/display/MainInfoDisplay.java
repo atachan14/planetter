@@ -8,13 +8,14 @@ import dao.AccountDAO;
 import model.AroundInfoManager;
 import model.data.AccountData;
 import model.data.TileData;
+import model.tool.dayCount;
 
 public class MainInfoDisplay {
 	AccountDAO acdao;
 	private String acName;
-	private String acKeepDate;
+	private String acKeepDay;
 	private String plName;
-	private String plKeepDate;
+	private String plKeepDay;
 
 	private int stardust;
 	private int stomach;
@@ -30,8 +31,6 @@ public class MainInfoDisplay {
 	private String v4Info;
 	private TileData v5Tile;
 	private String v6Info;
-
-	private String v5JSP;
 
 	public MainInfoDisplay(HttpSession session) {
 		AccountData acd = (AccountData) session.getAttribute("acd");
@@ -50,6 +49,7 @@ public class MainInfoDisplay {
 		this.x = acd.getX();
 		this.y = acd.getY();
 		this.direction = acd.getDirection();
+		this.acKeepDay = dayCount.getKeepDay(acd.getDate());
 	}
 
 	void setupAroundInfo() {
@@ -125,12 +125,14 @@ public class MainInfoDisplay {
 		return v6Info;
 	}
 
-	public String getV5JSP() {
-		return v5JSP;
+	public String getAcKeepDay() {
+		return acKeepDay;
 	}
 
-	public void setV5JSP(String v5jsp) {
-		v5JSP = v5jsp;
+	public String getPlKeepDay() {
+		return plKeepDay;
 	}
+
+	
 
 }

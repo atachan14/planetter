@@ -1,8 +1,9 @@
 package model.data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
-public class AccountData implements Serializable{
+public class AccountData implements Serializable {
 	private String name;
 	private String planet;
 	private int stardust;
@@ -10,8 +11,10 @@ public class AccountData implements Serializable{
 	private int x;
 	private int y;
 	private int direction;
+	private Timestamp date;
 
-	public AccountData(String name, String planet, int stardust, int stomach, int x, int y, int direction) {
+	public AccountData(String name, String planet, int stardust, int stomach, int x, int y, int direction,
+			Timestamp date) {
 		this.name = name;
 		this.planet = planet;
 		this.stardust = stardust;
@@ -19,9 +22,8 @@ public class AccountData implements Serializable{
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
+		this.date = date;
 	}
-	
-
 
 	public String getName() {
 		return name;
@@ -77,6 +79,14 @@ public class AccountData implements Serializable{
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+
+	public Timestamp getDate() {
+		return date;
+	}
+
+	public void setDate(Timestamp date) {
+		this.date = date;
 	}
 
 }
