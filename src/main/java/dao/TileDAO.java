@@ -116,4 +116,55 @@ public class TileDAO {
 			e.printStackTrace();
 		}
 	}
+
+	public static void disassembly(AccountData acd) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+
+			int tileId = 0;
+
+			String sql = "SELECT id FROM tile WHERE planet=? AND x=? AND y=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, acd.getPlanet());
+			pStmt.setInt(2, acd.getX());
+			pStmt.setInt(3, acd.getY());
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				tileId = rs.getInt("id");
+			} else {
+				System.out.println("dsassembly tileId 取得失敗");
+			}
+
+			sql = "DELETE FROM tile WHERE id=?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, tileId);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("dsassembly tileDELETE失敗:" + result);
+			}
+
+			sql = "DELETE page, tweet FROM page JOIN tweet ON page.tileId = tweet.tileId WHERE page.tileId = ?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, tileId);
+
+			result = pStmt.executeUpdate();
+			if (result <= 0) {
+				System.out.println("dsassembly pageとtweetDELETE失敗:" + result);
+			} else {
+				sql = "UPDATE account SET stardust=stardust+?,dsasseCount=dsasseCount+1 WHERE name = ?";
+				pStmt = conn.prepareStatement(sql);
+				pStmt.setInt(1, result);
+				pStmt.setString(2,acd.getName());
+				result = pStmt.executeUpdate();
+				if (result <= 0) {
+					System.out.println("dsassembly stardust更新失敗:" + result);
+				}
+			}
+		} catch (SQLException e1) {
+			System.out.println("dsassembly失敗　sqle");
+			e1.printStackTrace();
+		}
+	}
 }

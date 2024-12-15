@@ -24,6 +24,12 @@ public class PlanetData {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public PlanetData(String name,int x, int y) {
+		this.name = name;
+		this.x = x;
+		this.y = y;
+	}
 
 	public PlanetData(String name, int xsize, int ysize, String criater, int x, int y, Timestamp date, int nameDisplay,
 			int stealth) {

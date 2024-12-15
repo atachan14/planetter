@@ -12,6 +12,7 @@ import model.data.AccountData;
 import model.data.PageData;
 import model.data.TileData;
 import model.data.TweetData;
+import model.tool.Color;
 
 public class AroundInfoManager {
 	int x;
@@ -105,7 +106,7 @@ public class AroundInfoManager {
 		AccountData anotherPlayer = AccountDAO.posTileSearchAccount(tile);
 		if(anotherPlayer.getName()!=null) {
 			tile.setInfo(anotherPlayer.getName());
-			tile.setInfoColor("blue");
+			tile.setInfoColor(Color.getPlayer());
 			return;
 		}
 		
@@ -113,6 +114,7 @@ public class AroundInfoManager {
 		switch (tile.getType()) {
 		case "no objects":
 			tile.setInfo("--");
+			tile.setInfoColor(Color.getNoObject());
 			return;
 
 		case "tweet":
@@ -120,13 +122,15 @@ public class AroundInfoManager {
 			String value = tweetData.getValue();
 			String info = value.length() > 6 ? value.substring(0, 5) + "..." : value;
 			tile.setInfo(info);
+			tile.setInfoColor(Color.getTweet());
 			return;
 			
 		case "page":
 			PageData pageData = PageDAO.criatePageDate(tile.getId());
 			String pageValue = pageData.getTweetList().get(0).getValue();
-			String pageInfo = pageValue.length() > 6 ? pageValue.substring(0, 5) + "..." : pageValue;
+			String pageInfo = pageValue.length() > 16 ? pageValue.substring(0, 16) + "..." : pageValue;
 			tile.setInfo(pageInfo);
+			tile.setInfoColor(Color.getPage());
 			return;
 
 		default:

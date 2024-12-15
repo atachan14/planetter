@@ -8,6 +8,7 @@ import dao.AccountDAO;
 import model.AroundInfoManager;
 import model.data.AccountData;
 import model.data.TileData;
+import model.tool.Color;
 import model.tool.dayCount;
 
 public class MainInfoDisplay {
@@ -79,13 +80,11 @@ public class MainInfoDisplay {
 	}
 
 	void setupCenterButton() {
-		switch (v8InfoColor) {
-		case "blue":
+		String contact = Color.getPlayer();
+		if (v8InfoColor.equals(contact)) {
 			centerButton = "コンタクト";
-			return;
-		default:
+		} else {
 			centerButton = "歩く";
-			return;
 		}
 	}
 
@@ -180,7 +179,5 @@ public class MainInfoDisplay {
 	public String getV8Name() {
 		return v8Name;
 	}
-	
-	
 
 }

@@ -8,8 +8,8 @@
 <style>
 /* ページ全体の背景色とフォント色 */
 body {
-	background-color: white; /* 背景色 */
-	color: black; /* フォント色 */
+	background-color: black; /* 背景色 */
+	color: white; /* フォント色 */
 }
 
 .side-button {
@@ -29,9 +29,8 @@ body {
 	</div>
 	<div style="display: flex; align-items: center;">
 		<div style="width: 85%; height: 600px;">
-			<table style="width: 100%; height: 100%;">
+			<table style="font-size: 12px; width: 100%; height: 100%;">
 				<tr style="height: 5%">
-
 					<td style="text-align: center; width: 10%; color:${mainInfo.v7InfoColor}">[${mainInfo.v7Info}]</td>
 					<td style="text-align: center; width: 80%; color:${mainInfo.v8InfoColor}">【${mainInfo.v8Info}】</td>
 					<td style="text-align: center; width: 10%; color:${mainInfo.v9InfoColor}">[${mainInfo.v9Info}]</td>

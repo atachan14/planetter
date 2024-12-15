@@ -41,12 +41,11 @@ public class TweetDAO {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
 
-			String sql = "UPDATE account SET stardust = stardust - 1 WHERE name = ?";
+			String sql = "UPDATE account SET stardust = stardust - 1,tweetCount=tweetCount+1 WHERE name = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, criater);
 
 			int result = pStmt.executeUpdate();
-			System.out.println("tweetintile stardust-1 result:"+result);
 			
 			sql = "INSERT INTO `tweet`(`value`,`criater`,`tileId`) VALUES (?,?,?)";
 			pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -78,7 +77,7 @@ public class TweetDAO {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
 			
-			String sql = "UPDATE account SET stardust = stardust - 1 WHERE name = ?";
+			String sql = "UPDATE account SET stardust = stardust - 1,tweetCount=tweetCount+1 WHERE name = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, criater);
 

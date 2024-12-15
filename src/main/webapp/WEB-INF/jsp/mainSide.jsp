@@ -3,9 +3,8 @@
 	<div style="margin-top: 30%; text-align: center;">
 		<form action="galaxy" method="post">
 			<input type="hidden" name="plName" value="${mainInfo.plName}">
-			<input type="submit" name="button" value="ロケット" class="side-button"><br>
-			<input type="submit" name="button" value="アップデート" class="side-button"><br>
-			
+			<input type="submit" name="button" value="小型ロケット" class="side-button"><br>
+			<input type="submit" name="button" value="アップグレード" class="side-button" style="margin-top: 10%"><br>
 		</form>
 		<form action="mainSide" method="post">
 			<input type="submit" name="button" value="分解する" class="side-button" style="margin-top: 40%"><br> 

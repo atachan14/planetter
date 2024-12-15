@@ -56,13 +56,19 @@ public class PageDAO {
 		int generatedId = -1;
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO `page`(`name`,`criater`,`tileId`) VALUES (?,?,?)";
-			PreparedStatement pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			String sql = "UPDATE account SET stardust = stardust - 10,pageCount=pageCount+1 WHERE name = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, criater);
+
+			int result = pStmt.executeUpdate();
+			
+			sql = "INSERT INTO `page`(`name`,`criater`,`tileId`) VALUES (?,?,?)";
+			pStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pStmt.setString(1, pageName);
 			pStmt.setString(2, criater);
 			pStmt.setInt(3, tileId);
 
-			int result = pStmt.executeUpdate();
+			result = pStmt.executeUpdate();
 			if (result > 0) {
 				try (ResultSet generatedKeys = pStmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {

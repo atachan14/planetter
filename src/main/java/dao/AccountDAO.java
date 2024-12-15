@@ -137,8 +137,9 @@ public class AccountDAO {
 			if (rs.next()) {
 				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
 						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
-						rs.getTimestamp("date"));
-
+						rs.getTimestamp("date"),rs.getInt("walkCount"), rs.getInt("eatCount"), rs.getInt("tweetCount"), 
+						rs.getInt("pageCount"), rs.getInt("dsasseCount"),rs.getInt("planetCount"),
+						rs.getInt("killCount"));
 			} else {
 				System.out.println("acdao.getAll データが見つかりません");
 				return null;
@@ -162,7 +163,9 @@ public class AccountDAO {
 			if (rs.next()) {
 				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
 						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
-						rs.getTimestamp("date"));
+						rs.getTimestamp("date"),rs.getInt("walkCount"), rs.getInt("eatCount"), rs.getInt("tweetCount"), 
+						rs.getInt("pageCount"), rs.getInt("dsasseCount"),rs.getInt("planetCount"),
+						rs.getInt("killCount"));
 
 			} else {
 				System.out.println("acdao.getAll データが見つかりません:" + name);
@@ -182,7 +185,7 @@ public class AccountDAO {
 
 			int stomach = acd.getStomach() - 1;
 
-			String sql = "UPDATE account SET stomach = ? WHERE name = ?";
+			String sql = "UPDATE account SET stomach = ?,walkCount =walkCount+1 WHERE name = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, stomach);
 			pStmt.setString(2, acd.getName());
@@ -224,7 +227,9 @@ public class AccountDAO {
 			if (rs.next()) {
 				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
 						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
-						rs.getTimestamp("date"));
+						rs.getTimestamp("date"),rs.getInt("walkCount"), rs.getInt("eatCount"), rs.getInt("tweetCount"), 
+						rs.getInt("pageCount"), rs.getInt("dsasseCount"),rs.getInt("planetCount"),
+						rs.getInt("killCount"));
 			} else {
 				return new AccountData();
 			}
@@ -272,7 +277,7 @@ public class AccountDAO {
 			}
 
 			//stardust,stomach更新
-			sql = "UPDATE `account` SET `stardust`=?, `stomach`=? WHERE name=?";
+			sql = "UPDATE `account` SET `stardust`=?, `stomach`=?,killCount=killCount+1 WHERE name=?";
 			pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, stardust);
 			pStmt.setInt(2, stomach);
@@ -288,4 +293,80 @@ public class AccountDAO {
 		}
 	}
 
+	public static String acNameToPlName(String name) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT planet FROM `account` WHERE name=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, name);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				return rs.getString("planet");
+			} else {
+				System.out.println("acdao.acNameToPlName データが見つかりません:" + name);
+				return null;
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("acdao.acNameToPlName 失敗:" + name);
+			e1.printStackTrace();
+			return null;
+		}
+	}
+
+	public static void landingPlanet(String acName, String plName) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			int xSize = 0;
+			int ySize = 0;
+
+			String sql = "SELECT xsize,ysize FROM planet WHERE name=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, plName);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				xSize = rs.getInt("xsize");
+				ySize = rs.getInt("ysize");
+			} else {
+				System.out.println("acdao.landingPlanet planetSizeがみつからｎ plName:" + plName);
+			}
+
+			sql = "UPDATE account SET nowPlanet=?,x=?,y=? WHERE name = ?";
+			pStmt = conn.prepareStatement(sql);
+
+			Random random = new Random();
+			pStmt.setString(1, plName);
+			pStmt.setInt(2, random.nextInt(xSize));
+			pStmt.setInt(3, random.nextInt(ySize));
+			pStmt.setString(4, acName);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("acdao landingPlanet update失敗");
+			}
+		} catch (SQLException e1) {
+			System.out.println("acdao landingPlanet SQLE失敗");
+			e1.printStackTrace();
+		}
+	}
+
+	public static void rocketEntry(String acName) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+
+			String sql = "UPDATE account SET stardust=stardust-100 WHERE name = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, acName);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("acdao rocketEntry update失敗");
+			}
+		} catch (SQLException e1) {
+			System.out.println("acdao rocketEntry SQLE失敗");
+			e1.printStackTrace();
+		}
+	}
 }

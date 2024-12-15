@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import dao.TileDAO;
 import model.data.AccountData;
 
 /**
@@ -41,7 +42,12 @@ public class MainSideServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	
+		switch(request.getParameter("button")) {
+		case "分解する":
+			TileDAO.disassembly((AccountData)request.getSession().getAttribute("acd"));
+			response.sendRedirect("main");
+			return;
+		}
 		
 		AccountData acd = (AccountData) request.getSession().getAttribute("acd");
 		

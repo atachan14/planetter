@@ -35,34 +35,36 @@ div {
 </style>
 </head>
 <body>
-	${aroundPlanets[5][5].name}
-	<br>
-	<div style="display: flex; flex-wrap: wrap; width: 660px; align-items: center;">
-		<c:forEach var="i" begin="0" end="10">
-			<c:forEach var="j" begin="0" end="10">
-				<div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-					<c:choose>
-						<c:when test="${i==5&&j==5}">
-							<form action="main" method="get">
-								<button type="submit" name="cellValue" value="return" style="background-color: red" class="cell-button"></button>
-							</form>
-						</c:when>
-						<c:when test="${aroundPlanets[i][j].name==\"no planet\"}">
-							<form action="fromGalaxy" method="post">
-								<input type="hidden" name="cellType" value="criate">
-								<button type="submit" name="cellValue" value="no" style="background-color: white" class="cell-button"></button>
-							</form>
-						</c:when>
-						<c:when test="${aroundPlanets[i][j].name!=\"no planet\"}">
-							<form action="fromGalaxy" method="post">
-								<input type="hidden" name="cellType" value="landing">
-								<button type="submit" name="cellValue" value="${aroundPlanets[i][j].name}" style="background-color: blue" class="cell-button"></button>
-							</form>
-						</c:when>
-					</c:choose>
-				</div>
+	<jsp:include page="planetAndLogout.jsp" />
+	<div style="margin: 0; display: flex; align-items: center">
+		<div style="display: flex; flex-wrap: wrap; width: 605px; align-items: center;">
+			<c:forEach var="i" begin="0" end="10">
+				<c:forEach var="j" begin="0" end="10">
+					<div style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;">
+						<c:choose>
+							<c:when test="${i==5&&j==5}">
+								<form action="main" method="get">
+									<button type="submit" name="cellValue" value="return" style="background-color: red" class="cell-button"></button>
+								</form>
+							</c:when>
+							<c:when test="${aroundPlanets[i][j].name==\"no planet\"}">
+								<form action="criatePlanet" method="post">
+								<input type="hidden" name="type" value="toCriatePlanet">
+									<input type="hidden" name="x" value="${aroundPlanets[i][j].x}">
+									<button type="submit" name="y" value="${aroundPlanets[i][j].y}" style="background-color: white" class="cell-button"></button>
+								</form>
+							</c:when>
+							<c:when test="${aroundPlanets[i][j].name!=\"no planet\"}">
+								<form action="landingPlanet" method="post">
+									<input type="hidden" name="cellType" value="landing">
+									<button type="submit" name="plName" value="${aroundPlanets[i][j].name}" style="background-color: blue" class="cell-button"></button>
+								</form>
+							</c:when>
+						</c:choose>
+					</div>
+				</c:forEach>
 			</c:forEach>
-		</c:forEach>
+		</div>
 	</div>
 </body>
 </html>

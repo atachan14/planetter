@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Random;
 
 import model.Pos;
 import model.data.PlanetData;
@@ -44,7 +45,7 @@ public class PlanetDAO {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, pos.getx());
 			pStmt.setInt(2, pos.gety());
-			
+
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
 				String name = rs.getString("name");
@@ -59,7 +60,7 @@ public class PlanetDAO {
 				PlanetData pld = new PlanetData(name, xsize, ysize, criater, x, y, date, nameDisplay, stealth);
 				return pld;
 			} else {
-				return new PlanetData("no planet");
+				return new PlanetData("no planet", pos.getx(), pos.gety());
 			}
 		} catch (SQLException e) {
 			System.out.println("plNameToPos失敗 sqle");
@@ -89,5 +90,70 @@ public class PlanetDAO {
 		}
 		System.out.println("getSize通ってない");
 		return null;
+	}
+
+	public static boolean checkNewPlName(String plName) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT COUNT(*) FROM planet WHERE NAME = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, plName);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("checkPlName SQLE");
+			e.getStackTrace();
+			return false;
+		}
+		System.out.println("checkPlName 3");
+		return false;
+	}
+
+	public static void criateAndGoToPlanet(String plName, int xSize, int ySize, String acName, int x,
+			int y) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "INSERT INTO `planet`(`name`, `xsize`, `ysize`, `criater`, `x`, `y`) VALUES (?,?,?,?,?,?)";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, plName);
+			pStmt.setInt(2, xSize);
+			pStmt.setInt(3, ySize);
+			pStmt.setString(4, acName);
+			pStmt.setInt(5, x);
+			pStmt.setInt(6, y);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("criateAndGoToPlanet失敗1:"+result);
+			}
+
+			Random random = new Random();
+			int cost = (xSize + ySize) * 1000;
+			sql = "UPDATE account SET stardust=stardust-?,nowPlanet=?,x=?,y=?,direction=?, planetCount=planetCount+1 WHERE name=?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, cost);
+			pStmt.setString(2, plName);
+			pStmt.setInt(3, random.nextInt(xSize));
+			pStmt.setInt(4, random.nextInt(ySize));
+			pStmt.setInt(5, random.nextInt(4));
+			pStmt.setString(6, acName);
+			
+			result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("criateAndGoToPlanet updateAccount失敗:result"+result);
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("criateAndGoToPlanet失敗2");
+			e1.printStackTrace();
+		}
 	}
 }

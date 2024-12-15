@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import dao.AccountDAO;
 import model.data.PlanetData;
 import model.tool.AroundPlanetsCriater;
 
@@ -43,12 +44,19 @@ public class GalaxyServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		switch (request.getParameter("button")) {
-		case "ロケット":
+		case "小型ロケット":
+			AccountDAO.rocketEntry((String) request.getSession().getAttribute("acName"));
 			PlanetData[][] aroundPlanets = AroundPlanetsCriater.Exe(request.getParameter("plName"));
 			request.setAttribute("aroundPlanets", aroundPlanets);
 			request.getRequestDispatcher(PATH_galaxyMap).forward(request, response);
 			return;
-
+			
+		case "アップデート":
+			//あとで実装
+			return;
+		default:
+			System.out.println("galaxy dopost switch default");
+			return;
 		}
 	}
 

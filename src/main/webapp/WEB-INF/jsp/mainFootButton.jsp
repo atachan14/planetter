@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <div style="display: flex; justify-content: space-between; align-items: center;">
-	<div style="text-align: left; flex: 1">${mainInfo.acName}(${mainInfo.acKeepDay}, おなか:${mainInfo.stomach})
+	<div style="text-align: left; flex: 1;font-size: 20px">${mainInfo.acName}(${mainInfo.acKeepDay}, おなか:${mainInfo.stomach})
 		<form action="main" method="post">
 			<input type="hidden" name="formType" value="left"> 
 			<input type="submit" name="button" value="星屑を食べる">

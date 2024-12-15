@@ -16,12 +16,22 @@ public class AccountData implements Serializable {
 	private Timestamp date;
 	private String keepDays;
 	
+	private int walkCount;
+	private int eatCount;
+	private int tweetCount;
+	private int pageCount;
+	private int dsasseCount;
+	private int planetCount;
+	private int killCount;
+	
+	
+	
 	public AccountData() {
 		
 	}
 
 	public AccountData(String name, String planet, int stardust, int stomach, int x, int y, int direction,
-			Timestamp date) {
+			Timestamp date,int walkCount,int eatCount,int tweetCount,int pageCount,int dsasseCount,int planetCount,int killCount) {
 		this.name = name;
 		this.planet = planet;
 		this.stardust = stardust;
@@ -31,6 +41,14 @@ public class AccountData implements Serializable {
 		this.direction = direction;
 		this.date = date;
 		this.keepDays = dayCount.getKeepDay(date);
+		
+		this.walkCount=walkCount;
+		this.eatCount=eatCount;
+		this.tweetCount=tweetCount;
+		this.pageCount=pageCount;
+		this.dsasseCount=dsasseCount;
+		this.planetCount=planetCount;
+		this.killCount=killCount;
 	}
 
 	public String getName() {
@@ -99,6 +117,34 @@ public class AccountData implements Serializable {
 
 	public String getKeepDays() {
 		return keepDays;
+	}
+
+	public int getWalkCount() {
+		return walkCount;
+	}
+
+	public int getEatCount() {
+		return eatCount;
+	}
+
+	public int getTweetCount() {
+		return tweetCount;
+	}
+
+	public int getPageCount() {
+		return pageCount;
+	}
+
+	public int getDsasseCount() {
+		return dsasseCount;
+	}
+
+	public int getPlanetCount() {
+		return planetCount;
+	}
+
+	public int getKillCount() {
+		return killCount;
 	}
 	
 	
