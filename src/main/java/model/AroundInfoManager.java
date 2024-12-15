@@ -3,9 +3,13 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 
+import dao.AccountDAO;
+import dao.PageDAO;
 import dao.PlanetDAO;
 import dao.TileDAO;
 import dao.TweetDAO;
+import model.data.AccountData;
+import model.data.PageData;
 import model.data.TileData;
 import model.data.TweetData;
 
@@ -73,7 +77,7 @@ public class AroundInfoManager {
 		//		System.out.println("↓updated↓");
 		for (TileData tile : aroundTileMap.values()) {
 			edgeOverUpdate(tile);
-			TileDAO.posToTileData(tile);
+			TileDAO.posTileUpgrade(tile);
 			setupInfo(tile);
 
 			//			System.out.println(aroundPos[i].getxy());
@@ -97,19 +101,37 @@ public class AroundInfoManager {
 	}
 
 	public void setupInfo(TileData tile) {
+		//プレイヤー確認
+		AccountData anotherPlayer = AccountDAO.posTileSearchAccount(tile);
+		if(anotherPlayer.getName()!=null) {
+			tile.setInfo(anotherPlayer.getName());
+			tile.setInfoColor("blue");
+			return;
+		}
+		
+		//いなかったらタイル確認
 		switch (tile.getType()) {
 		case "no objects":
 			tile.setInfo("--");
-			break;
+			return;
 
 		case "tweet":
-			TweetData td = TweetDAO.tileIdToTweetData(tile.getId());
-			String value = td.getValue();
+			TweetData tweetData = TweetDAO.tileIdToTweetData(tile.getId());
+			String value = tweetData.getValue();
 			String info = value.length() > 6 ? value.substring(0, 5) + "..." : value;
 			tile.setInfo(info);
-			break;
+			return;
+			
+		case "page":
+			PageData pageData = PageDAO.criatePageDate(tile.getId());
+			String pageValue = pageData.getTweetList().get(0).getValue();
+			String pageInfo = pageValue.length() > 6 ? pageValue.substring(0, 5) + "..." : pageValue;
+			tile.setInfo(pageInfo);
+			return;
+
 		default:
 			System.out.println("AroundInfoManager setupInfo null");
+			return;
 		}
 	}
 

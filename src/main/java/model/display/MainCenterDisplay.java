@@ -13,7 +13,8 @@ public class MainCenterDisplay implements Serializable {
 	private TileData v5Tile;
 	private Object data;
 	private String sdButton;
-
+	private String placeholder;
+	
 	public MainCenterDisplay() {
 
 	}
@@ -29,16 +30,19 @@ public class MainCenterDisplay implements Serializable {
 		case "no objects":
 			jsp = "mainCenter/v5/noObject.jsp";
 			sdButton = "星屑を置く";
+			placeholder = "message";
 			return;
 		case "tweet":
 			jsp = "mainCenter/v5/tweet.jsp";
 			sdButton = "星屑を広げる";
+			placeholder = "page name";
 			data = TweetDAO.tileIdToTweetData(v5Tile.getId());
 			return;
 		case "page":
 			jsp = "mainCenter/v5/page.jsp";
-			sdButton = "星屑を重ねる";
-			data = PageDAO.findPageDate(v5Tile.getId());
+			sdButton = "星屑を並べる";
+			placeholder = "message";
+			data = PageDAO.criatePageDate(v5Tile.getId());
 			return;
 		case "book":
 			jsp = "mainCenter/v5/book.jsp";
@@ -49,15 +53,15 @@ public class MainCenterDisplay implements Serializable {
 		}
 	}
 
-	public void selectSideButton(String action) {
-		switch (action) {
-		case "星屑を置く":
-			jsp = "mainCenter/action/putTweet.jsp";
-			return;
-		case "星屑を広げる":
-			jsp = "mainCenter/action/spreadPage.jsp";
-		}
-	}
+//	public void selectSideButton(String action) {
+//		switch (action) {
+//		case "星屑を置く":
+//			jsp = "mainCenter/action/putTweet.jsp";
+//			return;
+//		case "星屑を広げる":
+//			jsp = "mainCenter/action/spreadPage.jsp";
+//		}
+//	}
 
 	public String getJsp() {
 		return jsp;
@@ -71,6 +75,12 @@ public class MainCenterDisplay implements Serializable {
 		return data;
 	}
 
+	
+	
+	public TileData getV5Tile() {
+		return v5Tile;
+	}
+
 	public String getSdButton() {
 		return sdButton;
 	}
@@ -78,5 +88,14 @@ public class MainCenterDisplay implements Serializable {
 	public void setSdButton(String sdButton) {
 		this.sdButton = sdButton;
 	}
+
+	public String getPlaceholder() {
+		return placeholder;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+	
 
 }

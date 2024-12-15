@@ -8,21 +8,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import dao.TileDAO;
-import dao.TweetDAO;
+import dao.AccountDAO;
 import model.data.AccountData;
 
 /**
- * Servlet implementation class TweetServlet
+ * Servlet implementation class ContaxtServlet
  */
-@WebServlet("/tweet")
-public class TweetServlet extends HttpServlet {
+@WebServlet("/contact")
+public class ContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final String PATH_contact = "WEB-INF/jsp/contact/contact.jsp";
+	private final String PATH_result = "WEB-INF/jsp/contact/result.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public TweetServlet() {
+	public ContactServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -33,7 +34,7 @@ public class TweetServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher(PATH_contact).forward(request, response);
 	}
 
 	/**
@@ -42,21 +43,17 @@ public class TweetServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String value = request.getParameter("tweet");
-		if (!checkValueSize(value)) {
-			//あとで実装 フォワードで戻してエラーフラグを受け取らせる かも。
+		switch (request.getParameter("kill")) {
+		case "殺す":
+			System.out.println((String) request.getSession().getAttribute("acName"));
+			System.out.println((String) request.getParameter("v8acName"));
+			AccountData acd = AccountDAO.getAll((String) request.getSession().getAttribute("acName"));
+			AccountData v8acd = AccountDAO.getAll((String) request.getParameter("v8acName"));
+			AccountDAO.killAccount(acd, v8acd);
+			request.getRequestDispatcher(PATH_result).forward(request, response);
+			return;
 		}
-		int tileId = TileDAO.insertTile("tweet",(AccountData)request.getSession().getAttribute("acd"));
-		TweetDAO.insertTweet(value, request.getParameter("acName"),tileId);
 
-		response.sendRedirect("main");
-	}
-
-	boolean checkValueSize(String value) {
-		if (value.length() > 64) {
-			return false;
-		}
-		return true;
 	}
 
 }

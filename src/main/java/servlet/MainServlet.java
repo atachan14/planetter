@@ -10,7 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import dao.AccountDAO;
-import model.FootButtonExe;
+import model.FootCenterButton;
+import model.FootRightButton;
 import model.data.AccountData;
 import model.display.MainCenterDisplay;
 import model.display.MainInfoDisplay;
@@ -50,6 +51,8 @@ public class MainServlet extends HttpServlet {
 		MainCenterDisplay mainCenter = new MainCenterDisplay(session);
 		session.setAttribute("mainCenter", mainCenter);
 
+		System.out.println();
+		System.out.println(acd.getX() + "," + acd.getY());
 		request.getRequestDispatcher(PATH_main).forward(request, response);
 
 	}
@@ -61,15 +64,16 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		switch (request.getParameter("formType")) {
-		case "foot":
-			FootButtonExe fbe = new FootButtonExe(request);
-			fbe.exe();
-			doGet(request, response);
-		case "sdButton":
-			MainCenterDisplay mainCenter = new MainCenterDisplay();
-			mainCenter.selectSideButton(request.getParameter("button"));
-			request.setAttribute("mainCenter", mainCenter);
-			request.getRequestDispatcher(PATH_main).forward(request, response);
+		case "center":
+			FootCenterButton fbe = new FootCenterButton(request);
+			String url = fbe.exe();
+			response.sendRedirect(url);
+			break;
+
+		case "right":
+			FootRightButton.exe(request);
+			response.sendRedirect("main");
+			break;
 		}
 	}
 }

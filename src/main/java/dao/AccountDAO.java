@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Random;
 
 import model.data.AccountData;
+import model.data.TileData;
 
 public class AccountDAO {
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/planetter";
@@ -27,12 +28,6 @@ public class AccountDAO {
 	}
 
 	public boolean AccountCheck() {
-		//		try {
-		//			Class.forName(JDBC_DRIVER);
-		//		} catch (ClassNotFoundException e) {
-		//			throw new IllegalStateException(
-		//					"JDBCドライバを読み込めませんでした");
-		//		}
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
@@ -57,12 +52,6 @@ public class AccountDAO {
 	}
 
 	public String getPass(String name) {
-		//		try {
-		//			Class.forName(JDBC_DRIVER);
-		//		} catch (ClassNotFoundException e) {
-		//			throw new IllegalStateException(
-		//					"JDBCドライバを読み込めませんでした");
-		//		}
 
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
@@ -147,7 +136,8 @@ public class AccountDAO {
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
 				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
-						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),rs.getTimestamp("date"));
+						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
+						rs.getTimestamp("date"));
 
 			} else {
 				System.out.println("acdao.getAll データが見つかりません");
@@ -161,24 +151,141 @@ public class AccountDAO {
 		}
 	}
 
-	public static boolean updateInt(String calumn, int value, String name) {
+	public static AccountData getAll(String name) {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "UPDATE account SET " + calumn + " = ? WHERE name = ?";
+			String sql = "SELECT * FROM `account` WHERE name=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, value);
-			pStmt.setString(2, name);
+			pStmt.setString(1, name);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
+						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
+						rs.getTimestamp("date"));
+
+			} else {
+				System.out.println("acdao.getAll データが見つかりません:" + name);
+				return null;
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("acdao.getAll失敗:" + name);
+			e1.printStackTrace();
+			return null;
+		}
+	}
+
+	public static boolean moveShaftIntAcd(String shaft, int point, AccountData acd) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+
+			int stomach = acd.getStomach() - 1;
+
+			String sql = "UPDATE account SET stomach = ? WHERE name = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, stomach);
+			pStmt.setString(2, acd.getName());
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {
-				System.out.println("acdao.updateInt失敗1");
+				System.out.println("move stomach update失敗1");
+				return false;
+			}
+
+			sql = "UPDATE account SET " + shaft + " = ? WHERE name = ?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, point);
+			pStmt.setString(2, acd.getName());
+
+			result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("move Int失敗1");
 				return false;
 			}
 		} catch (SQLException e1) {
-			System.out.println("acdao.updateInt失敗2");
+			System.out.println("move Int失敗2");
 			e1.printStackTrace();
 			return false;
 		}
 		return true;
 	}
+
+	public static AccountData posTileSearchAccount(TileData posTile) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT * FROM `account` WHERE nowPlanet=? AND x=? AND y=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, posTile.getPlName());
+			pStmt.setInt(2, posTile.getX());
+			pStmt.setInt(3, posTile.getY());
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				return new AccountData(rs.getString("name"), rs.getString("nowplanet"), rs.getInt("stardust"),
+						rs.getInt("stomach"), rs.getInt("x"), rs.getInt("y"), rs.getInt("direction"),
+						rs.getTimestamp("date"));
+			} else {
+				return new AccountData();
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("posTileSearchAccount sqle失敗");
+			e1.printStackTrace();
+			return new AccountData();
+		}
+	}
+
+	public static void deleteAccount(String acName) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "DELETE FROM `account` WHERE name=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, acName);
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("deleteAccount失敗1");
+			}
+		} catch (SQLException e1) {
+			System.out.println("deleteAccount失敗2");
+			e1.printStackTrace();
+		}
+	}
+
+	public static void killAccount(AccountData acd, AccountData v8acd) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+
+			//stardustとstomach保存
+			int stardust = acd.getStardust() + v8acd.getStardust();
+			int stomach = acd.getStomach() + v8acd.getStomach();
+
+			//delete
+			String sql = "DELETE FROM `account` WHERE name=?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, v8acd.getName());
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("killAccount delete失敗");
+			}
+
+			//stardust,stomach更新
+			sql = "UPDATE `account` SET `stardust`=?, `stomach`=? WHERE name=?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, stardust);
+			pStmt.setInt(2, stomach);
+			pStmt.setString(3, acd.getName());
+
+			result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("killAccount update失敗");
+			}
+		} catch (SQLException e1) {
+			System.out.println("killAccount SQLE失敗");
+			e1.printStackTrace();
+		}
+	}
+
 }

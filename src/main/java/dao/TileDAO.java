@@ -16,7 +16,7 @@ public class TileDAO {
 	private final static String DB_PASS = "root";
 	private final static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-	public static void posToTileData(TileData tile) {
+	public static void posTileUpgrade(TileData tile) {
 		String planet = tile.getPlName();
 		int x = tile.getX();
 		int y = tile.getY();
@@ -40,6 +40,34 @@ public class TileDAO {
 		} catch (SQLException e) {
 			System.out.println("ObjectDAO.findType SQLE" + x + "," + y);
 			e.printStackTrace();
+		}
+	}
+
+	public static int acdToTileId(AccountData acd) {
+		int error = -1;
+		String planet = acd.getPlanet();
+		int x = acd.getX();
+		int y = acd.getY();
+
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT id FROM tile WHERE planet = ? AND x = ? AND y = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, planet);
+			pStmt.setInt(2, x);
+			pStmt.setInt(3, y);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("id");
+			} else {
+				return error;
+			}
+
+		} catch (SQLException e) {
+			System.out.println("TileDAO.acdToTileid SQLE" + x + "," + y);
+			e.printStackTrace();
+			return error;
 		}
 	}
 
@@ -71,20 +99,20 @@ public class TileDAO {
 		return generatedId;
 	}
 
-	public static void updateType(String type, String id) {
+	public static void updateType(String type, int id) {
 		try (Connection conn = DriverManager.getConnection(
 				DB_URL, DB_USER, DB_PASS)) {
-			String sql = "UPDATE `tile` SET `type`=?, WHERE id=?";
+			String sql = "UPDATE `tile` SET `type`=? WHERE id=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, type);
-			pStmt.setString(2, id);
+			pStmt.setInt(2, id);
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {
-				System.out.println("insertTile:しっぱい１");
+				System.out.println("updateTile:しっぱい１");
 			}
 		} catch (SQLException e) {
-			System.out.println("insertTile:しっぱい2");
+			System.out.println("updateTile:しっぱい2");
 			e.printStackTrace();
 		}
 	}

@@ -32,13 +32,21 @@ public class MainInfoDisplay {
 	private TileData v5Tile;
 	private String v6Info;
 
+	private String v7InfoColor;
+	private String v8InfoColor;
+	private String v9InfoColor;
+
+	private String v4InfoColor;
+	private String v6InfoColor;
+
+	private String centerButton;
+	private String v8Name;
+
 	public MainInfoDisplay(HttpSession session) {
-		AccountData acd = (AccountData) session.getAttribute("acd");
-		System.out.println(acd.getName());
 
 		setupProperties((AccountData) session.getAttribute("acd"));
 		setupAroundInfo();
-		setupV5JSP();
+		setupCenterButton();
 	}
 
 	void setupProperties(AccountData acd) {
@@ -59,14 +67,26 @@ public class MainInfoDisplay {
 		v7Info = aroundTile.get(7).getInfo();
 		v8Info = aroundTile.get(8).getInfo();
 		v9Info = aroundTile.get(9).getInfo();
-
 		v4Info = aroundTile.get(4).getInfo();
 		v5Tile = aroundTile.get(5);
 		v6Info = aroundTile.get(6).getInfo();
+
+		v7InfoColor = aroundTile.get(7).getInfoColor();
+		v8InfoColor = aroundTile.get(8).getInfoColor();
+		v9InfoColor = aroundTile.get(9).getInfoColor();
+		v4InfoColor = aroundTile.get(4).getInfoColor();
+		v6InfoColor = aroundTile.get(6).getInfoColor();
 	}
 
-	void setupV5JSP() {
-	
+	void setupCenterButton() {
+		switch (v8InfoColor) {
+		case "blue":
+			centerButton = "コンタクト";
+			return;
+		default:
+			centerButton = "歩く";
+			return;
+		}
 	}
 
 	public String getAcName() {
@@ -133,6 +153,34 @@ public class MainInfoDisplay {
 		return plKeepDay;
 	}
 
+	public String getV7InfoColor() {
+		return v7InfoColor;
+	}
+
+	public String getV8InfoColor() {
+		return v8InfoColor;
+	}
+
+	public String getV9InfoColor() {
+		return v9InfoColor;
+	}
+
+	public String getV4InfoColor() {
+		return v4InfoColor;
+	}
+
+	public String getV6InfoColor() {
+		return v6InfoColor;
+	}
+
+	public String getCenterButton() {
+		return centerButton;
+	}
+
+	public String getV8Name() {
+		return v8Name;
+	}
+	
 	
 
 }

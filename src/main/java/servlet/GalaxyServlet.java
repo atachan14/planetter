@@ -8,21 +8,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import dao.PageDAO;
-import dao.TileDAO;
-import dao.TweetDAO;
+import model.data.PlanetData;
+import model.tool.AroundPlanetsCriater;
 
 /**
- * Servlet implementation class PageServlet
+ * Servlet implementation class Galaxy
  */
-@WebServlet("/PageServlet")
-public class PageServlet extends HttpServlet {
+@WebServlet("/galaxy")
+public class GalaxyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final String PATH_galaxyMap = "WEB-INF/jsp/galaxyMap.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public PageServlet() {
+	public GalaxyServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -42,23 +42,14 @@ public class PageServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String pageName = request.getParameter("pageName");
-		if (!checkValueSize(pageName)) {
-			//あとで実装 フォワードで戻してエラーフラグを受け取らせる予定。
+		switch (request.getParameter("button")) {
+		case "ロケット":
+			PlanetData[][] aroundPlanets = AroundPlanetsCriater.Exe(request.getParameter("plName"));
+			request.setAttribute("aroundPlanets", aroundPlanets);
+			request.getRequestDispatcher(PATH_galaxyMap).forward(request, response);
+			return;
+
 		}
-		int pageId = PageDAO.insertPage(pageName, request.getParameter("acName"), request.getParameter("tileId"));
-		System.out.println("pageServlet.pageId:" + pageId);
-
-		TweetDAO.updatePageId(pageId, request.getParameter("tileId"));
-		TileDAO.updateType("page", request.getParameter("tileId"));
-
-		response.sendRedirect("main");
 	}
 
-	boolean checkValueSize(String value) {
-		if (value.length() > 16) {
-			return false;
-		}
-		return true;
-	}
 }

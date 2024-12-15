@@ -8,13 +8,14 @@ public class TileData {
 	int y;
 
 	String info;
+	String infoColor = "";
 
 	public TileData(String plName, int x, int y) {
 		this.plName = plName;
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public TileData(int id, String type, String plName, int x, int y) {
 		this.id = id;
 		this.type = type;
@@ -66,6 +67,14 @@ public class TileData {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public String getInfoColor() {
+		return infoColor;
+	}
+
+	public void setInfoColor(String infoColor) {
+		this.infoColor = infoColor;
 	}
 
 }

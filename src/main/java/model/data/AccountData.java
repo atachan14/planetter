@@ -3,6 +3,8 @@ package model.data;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import model.tool.dayCount;
+
 public class AccountData implements Serializable {
 	private String name;
 	private String planet;
@@ -12,6 +14,11 @@ public class AccountData implements Serializable {
 	private int y;
 	private int direction;
 	private Timestamp date;
+	private String keepDays;
+	
+	public AccountData() {
+		
+	}
 
 	public AccountData(String name, String planet, int stardust, int stomach, int x, int y, int direction,
 			Timestamp date) {
@@ -23,6 +30,7 @@ public class AccountData implements Serializable {
 		this.y = y;
 		this.direction = direction;
 		this.date = date;
+		this.keepDays = dayCount.getKeepDay(date);
 	}
 
 	public String getName() {
@@ -88,5 +96,11 @@ public class AccountData implements Serializable {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+
+	public String getKeepDays() {
+		return keepDays;
+	}
+	
+	
 
 }

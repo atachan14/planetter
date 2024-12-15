@@ -5,29 +5,51 @@
 <head>
 <meta charset="UTF-8">
 <title>Planetter</title>
+<style>
+/* ページ全体の背景色とフォント色 */
+body {
+	background-color: white; /* 背景色 */
+	color: black; /* フォント色 */
+}
+
+.side-button {
+	height: 50px;
+	font-size: 14px;
+	background-color: #f0f0f0;
+	border-radius: 8px;
+}
+</style>
 </head>
 <body>
-	${mainInfo.plName}
+	<div style="display: flex;">
+		<div style="width: 90%">${mainInfo.plName}</div>
+		<div style="width: 10%;">
+			<a href="logout">ログアウト</a>
+		</div>
+	</div>
 	<div style="display: flex; align-items: center;">
-		<div style="background: lightblue; width: 85%; height: 600px;">
+		<div style="width: 85%; height: 600px;">
 			<table style="width: 100%; height: 100%;">
 				<tr style="height: 5%">
-					<td style="text-align: center; width: 10%;">${mainInfo.v7Info}</td>
-					<td style="text-align: center; width: 80%;">${mainInfo.v8Info}</td>
-					<td style="text-align: center; width: 10%;">${mainInfo.v9Info}</td>
+
+					<td style="text-align: center; width: 10%; color:${mainInfo.v7InfoColor}">[${mainInfo.v7Info}]</td>
+					<td style="text-align: center; width: 80%; color:${mainInfo.v8InfoColor}">【${mainInfo.v8Info}】</td>
+					<td style="text-align: center; width: 10%; color:${mainInfo.v9InfoColor}">[${mainInfo.v9Info}]</td>
 				</tr>
 				<tr style="height: 85%">
-					<td style="text-align: center;">${mainInfo.v4Info}</td>
-					<td style="overflow: auto; text-align: center;"><jsp:include page="${mainCenter.jsp}" /></td>
-					<td style="text-align: center;">${mainInfo.v6Info}</td>
+					<td style="text-align: center; color:${mainInfo.v4InfoColor}">[${mainInfo.v4Info}]</td>
+					<td style="text-align: center;"><jsp:include page="${mainCenter.jsp}" /></td>
+					<td style="text-align: center; color:${mainInfo.v6InfoColor}">[${mainInfo.v6Info}]</td>
 				</tr>
 				<tr style="height: 10%">
 					<td colspan="3"><jsp:include page="mainFootButton.jsp" /></td>
 				</tr>
 			</table>
 		</div>
-		<div style="background: lightcoral; width: 15%; height: 600px;"><jsp:include page="mainSide.jsp" /></div>
+		<div style="width: 15%; height: 600px;"><jsp:include page="mainSide.jsp" /></div>
 	</div>
+
+
 
 
 </body>
