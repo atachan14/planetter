@@ -20,7 +20,7 @@
 			<input type="hidden" name="formType" value="right"> 
 <!--			<input type="hidden" name="pageId" value="--"> あとで実装-->
 			<input type="text" name="value"  placeholder="${mainCenter.placeholder}"><br> 
-			<input type="submit" name="button" value="${mainCenter.sdButton}">(:${mainInfo.stardust})
+			<input type="submit" name="button" value="${mainCenter.sdButton}">(:${mainInfo.stardust}sd)
 		</form>
 
 	</div>

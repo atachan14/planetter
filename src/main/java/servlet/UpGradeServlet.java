@@ -2,14 +2,13 @@ package servlet;
 
 import java.io.IOException;
 
+import dao.PlanetDAO;
+import dao.UpGradeDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import dao.PlanetDAO;
-import dao.UpGradeDAO;
 import model.data.AccountData;
 import model.data.UpGradeData;
 import model.display.MainCenterDisplay;
@@ -67,7 +66,7 @@ public class UpGradeServlet extends HttpServlet {
 		case "ハイパーディスティニードロー":
 			AccountData acd3 = (AccountData) request.getSession().getAttribute("acd");
 			UpGradeData ug2 = DestinyDrowManager.hyperExe(acd3.getPlanet());
-			UpGradeDAO.insertUpGrade(ug2.getDestiny(), ug2.getUgName(), ug2.getSd(), acd3, 40000);
+			UpGradeDAO.insertUpGrade(ug2.getDestiny(), ug2.getUgName(), ug2.getSd(), acd3, 20000);
 			response.sendRedirect("main");
 			return;
 		default:

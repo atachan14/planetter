@@ -28,7 +28,7 @@ body {
 		</div>
 	</div>
 	<div style="display: flex; align-items: center;">
-		<div style="width: 85%; height: 600px;">
+		<div style="width: 85%; height: 550px;">
 			<table style="font-size: 12px; width: 100%; height: 100%;">
 				<tr style="height: 5%">
 					<td style="text-align: center; width: 10%; color:${mainInfo.v7InfoColor}">[${mainInfo.v7Info}]</td>

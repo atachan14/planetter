@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 
-<div style="display: flex; flex-direction: column; height: 500px;">
+<div style="display: flex; flex-direction: column; height: 450px;">
 	<div style="flex: 5; overflow: auto; display: flex; flex-direction: column; justify-content: center;">
 		<c:forEach var="tweet" items="${mainCenter.data.tweetList}">
 			<div style="font-size: 18px;  color: aqua;">${tweet.value}</div>
