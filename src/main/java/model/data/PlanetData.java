@@ -15,6 +15,7 @@ public class PlanetData {
 	String keepDays;
 	int nameDisplay;
 	int stealth;
+	String backGroundColor;
 
 	public PlanetData(String name) {
 		this.name = name;
@@ -24,15 +25,15 @@ public class PlanetData {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public PlanetData(String name,int x, int y) {
+
+	public PlanetData(String name, int x, int y) {
 		this.name = name;
 		this.x = x;
 		this.y = y;
 	}
 
 	public PlanetData(String name, int xsize, int ysize, String criater, int x, int y, Timestamp date, int nameDisplay,
-			int stealth) {
+			int stealth, String backGroundColor) {
 		this.name = name;
 		this.xsize = xsize;
 		this.ysize = ysize;
@@ -43,6 +44,7 @@ public class PlanetData {
 		this.keepDays = dayCount.getKeepDay(date);
 		this.nameDisplay = nameDisplay;
 		this.stealth = stealth;
+		this.backGroundColor = backGroundColor;
 	}
 
 	public String getName() {
@@ -84,5 +86,11 @@ public class PlanetData {
 	public int getStealth() {
 		return stealth;
 	}
+
+	public String getBackGroundColor() {
+		return backGroundColor;
+	}
+	
+	
 
 }

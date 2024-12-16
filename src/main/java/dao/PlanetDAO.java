@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Random;
 
 import model.Pos;
+import model.data.AccountData;
 import model.data.PlanetData;
 
 public class PlanetDAO {
@@ -57,13 +58,14 @@ public class PlanetDAO {
 				Timestamp date = rs.getTimestamp("date");
 				int nameDisplay = rs.getInt("nameDisplay");
 				int stealth = rs.getInt("stealth");
-				PlanetData pld = new PlanetData(name, xsize, ysize, criater, x, y, date, nameDisplay, stealth);
+				String backGroundColor = rs.getString("backGroundColor");
+				PlanetData pld = new PlanetData(name, xsize, ysize, criater, x, y, date, nameDisplay, stealth,backGroundColor);
 				return pld;
 			} else {
 				return new PlanetData("no planet", pos.getx(), pos.gety());
 			}
 		} catch (SQLException e) {
-			System.out.println("plNameToPos失敗 sqle");
+			System.out.println("PosToAll失敗 sqle");
 			e.printStackTrace();
 		}
 		return null;
@@ -132,7 +134,7 @@ public class PlanetDAO {
 
 			int result = pStmt.executeUpdate();
 			if (result != 1) {
-				System.out.println("criateAndGoToPlanet失敗1:"+result);
+				System.out.println("criateAndGoToPlanet失敗1:" + result);
 			}
 
 			Random random = new Random();
@@ -145,15 +147,75 @@ public class PlanetDAO {
 			pStmt.setInt(4, random.nextInt(ySize));
 			pStmt.setInt(5, random.nextInt(4));
 			pStmt.setString(6, acName);
-			
+
 			result = pStmt.executeUpdate();
 			if (result != 1) {
-				System.out.println("criateAndGoToPlanet updateAccount失敗:result"+result);
+				System.out.println("criateAndGoToPlanet updateAccount失敗:result" + result);
 			}
 
 		} catch (SQLException e1) {
 			System.out.println("criateAndGoToPlanet失敗2");
 			e1.printStackTrace();
 		}
+	}
+
+	public static void changeColor(String what, String color, AccountData acd) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+
+			String sql = "UPDATE planet SET " + what + " =? WHERE name = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, color);
+			pStmt.setString(2, acd.getPlanet());
+
+			int result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("changeColor plnet update失敗");
+			}
+
+			sql = "UPDATE account SET stardust=stardust-1000 WHERE name = ?";
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, acd.getName());
+
+			result = pStmt.executeUpdate();
+			if (result != 1) {
+				System.out.println("changeColor account update失敗");
+			}
+
+		} catch (SQLException e1) {
+			System.out.println("changeColor SQLE失敗");
+			e1.printStackTrace();
+		}
+	}
+	
+	public static PlanetData plNameToAll(String plName) {
+		try (Connection conn = DriverManager.getConnection(
+				DB_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT * FROM planet WHERE name = ?;";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, plName);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				String name = rs.getString("name");
+				int xsize = rs.getInt("xsize");
+				int ysize = rs.getInt("ysize");
+				String criater = rs.getString("criater");
+				int x = rs.getInt("x");
+				int y = rs.getInt("y");
+				Timestamp date = rs.getTimestamp("date");
+				int nameDisplay = rs.getInt("nameDisplay");
+				int stealth = rs.getInt("stealth");
+				String backGroundColor = rs.getString("backGroundColor");
+				PlanetData pld = new PlanetData(name, xsize, ysize, criater, x, y, date, nameDisplay, stealth,backGroundColor);
+				return pld;
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			System.out.println("plNameToAll失敗 sqle");
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

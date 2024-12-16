@@ -14,14 +14,14 @@ import dao.PlanetDAO;
  * Servlet implementation class CriatePlanet
  */
 @WebServlet("/criatePlanet")
-public class CriatePlanet extends HttpServlet {
+public class CriatePlanetServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String PATH_criatePlanet = "WEB-INF/jsp/criatePlanet.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CriatePlanet() {
+	public CriatePlanetServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

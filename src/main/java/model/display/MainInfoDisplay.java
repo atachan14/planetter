@@ -5,8 +5,10 @@ import java.util.Map;
 import jakarta.servlet.http.HttpSession;
 
 import dao.AccountDAO;
+import dao.PlanetDAO;
 import model.AroundInfoManager;
 import model.data.AccountData;
+import model.data.PlanetData;
 import model.data.TileData;
 import model.tool.Color;
 import model.tool.dayCount;
@@ -16,6 +18,7 @@ public class MainInfoDisplay {
 	private String acName;
 	private String acKeepDay;
 	private String plName;
+	private String backGroundColor;
 	private String plKeepDay;
 
 	private int stardust;
@@ -59,6 +62,9 @@ public class MainInfoDisplay {
 		this.y = acd.getY();
 		this.direction = acd.getDirection();
 		this.acKeepDay = dayCount.getKeepDay(acd.getDate());
+		PlanetData pld = PlanetDAO.plNameToAll(plName);
+		this.plKeepDay = pld.getKeepDays();
+		this.backGroundColor = pld.getBackGroundColor();
 	}
 
 	void setupAroundInfo() {
@@ -151,6 +157,8 @@ public class MainInfoDisplay {
 	public String getPlKeepDay() {
 		return plKeepDay;
 	}
+	
+	
 
 	public String getV7InfoColor() {
 		return v7InfoColor;
@@ -179,5 +187,11 @@ public class MainInfoDisplay {
 	public String getV8Name() {
 		return v8Name;
 	}
+
+	public String getBackGroundColor() {
+		return backGroundColor;
+	}
+	
+	
 
 }

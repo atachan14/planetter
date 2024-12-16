@@ -92,6 +92,8 @@ public class MainCenterDisplay implements Serializable {
 	public String getPlaceholder() {
 		return placeholder;
 	}
+	
+	
 
 	public void setData(Object data) {
 		this.data = data;

@@ -8,23 +8,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import dao.AccountDAO;
 import dao.WearingCraftDAO;
 import model.data.AccountData;
 
 /**
- * Servlet implementation class ContaxtServlet
+ * Servlet implementation class CraftServlet
  */
-@WebServlet("/contact")
-public class ContactServlet extends HttpServlet {
+@WebServlet("/craft")
+public class CraftServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final String PATH_contact = "WEB-INF/jsp/contact/contact.jsp";
-	private final String PATH_result = "WEB-INF/jsp/contact/result.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ContactServlet() {
+	public CraftServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -35,7 +32,7 @@ public class ContactServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getRequestDispatcher(PATH_contact).forward(request, response);
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -44,18 +41,12 @@ public class ContactServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		switch (request.getParameter("kill")) {
-		case "殺す":
-			AccountData acd = AccountDAO.getAll((String) request.getSession().getAttribute("acName"));
-			AccountData v8acd = AccountDAO.getAll((String) request.getParameter("v8acName"));
-			AccountDAO.killAccount(acd, v8acd);
-			boolean selfDestruction = WearingCraftDAO.checkWearingCraft(v8acd.getName(), "自爆装置(1w)");
-			request.setAttribute("selfDestruction", selfDestruction);
-
-			request.getRequestDispatcher(PATH_result).forward(request, response);
-			return;
+		switch (request.getParameter("button")) {
+		case "自爆装置(1w)":
+			AccountData acd = (AccountData) request.getSession().getAttribute("acd");
+			WearingCraftDAO.insertWearingCraft(-1, "自爆装置(1w)", acd, 90);
+			response.sendRedirect("main");
 		}
-
 	}
 
 }

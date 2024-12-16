@@ -51,8 +51,7 @@ public class MainServlet extends HttpServlet {
 		MainCenterDisplay mainCenter = new MainCenterDisplay(session);
 		session.setAttribute("mainCenter", mainCenter);
 
-		System.out.println();
-		System.out.println(acd.getX() + "," + acd.getY());
+		System.out.print(" @"+acd.getX() + "," + acd.getY());
 		request.getRequestDispatcher(PATH_main).forward(request, response);
 
 	}

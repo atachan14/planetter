@@ -8,7 +8,7 @@
 <style>
 /* ページ全体の背景色とフォント色 */
 body {
-	background-color: black; /* 背景色 */
+	background-color: ${mainInfo.backGroundColor}; /* 背景色 */
 	color: white; /* フォント色 */
 }
 

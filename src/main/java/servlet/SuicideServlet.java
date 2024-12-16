@@ -11,15 +11,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import dao.AccountDAO;
 
 /**
- * Servlet implementation class GoToPlanet
+ * Servlet implementation class Suicide
  */
-@WebServlet("/landingPlanet")
-public class LandingPlanet extends HttpServlet {
+@WebServlet("/suicide")
+public class SuicideServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LandingPlanet() {
+    public SuicideServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,8 +38,12 @@ public class LandingPlanet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		AccountDAO.landingPlanet((String)request.getSession().getAttribute("acName"),(String)request.getParameter("plName"));
-		response.sendRedirect("main");
+		switch(request.getParameter("type")) {
+		case "自爆装置だ！":
+			AccountDAO.deleteAccount((String)request.getSession().getAttribute("acName"));
+			response.sendRedirect("logout");
+			return;
+		}
 	}
 
 }
